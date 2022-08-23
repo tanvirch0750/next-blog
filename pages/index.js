@@ -1,8 +1,12 @@
+import FeaturedPosts from '../components/home-page/FeaturedPosts';
+import Hero from '../components/home-page/Hero';
+
 const HomePage = () => {
   return (
-    <div>
-      <h1>Hello Next Blog</h1>
-    </div>
+    <>
+      <Hero />
+      <FeaturedPosts />
+    </>
   );
 };
 
