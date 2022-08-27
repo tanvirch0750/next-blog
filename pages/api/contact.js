@@ -41,15 +41,12 @@ const handler = async (req, res) => {
         .insertOne(newMessage);
       newMessage.id = result.insertedId;
     } catch (error) {
-      console.log(error);
       client.close();
       res.status(500).json({ message: 'Sending Message failed' });
       return;
     }
 
     client.close();
-
-    console.log(newMessage);
 
     res
       .status(201)
