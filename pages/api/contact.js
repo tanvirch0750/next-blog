@@ -1,4 +1,6 @@
-const handler = (req, res) => {
+import { MongoClient } from 'mongodb';
+
+const handler = async (req, res) => {
   if (req.method === 'POST') {
     const { email, name, message } = req.body;
 
@@ -20,6 +22,33 @@ const handler = (req, res) => {
       message,
       name,
     };
+
+    let client;
+    try {
+      client = await MongoClient.connect(
+        `mongodb+srv://nextblog_admin:nextblog_admin@cluster0.r3o7j.mongodb.net/next-blog?retryWrites=true&w=majority`
+      );
+    } catch (error) {
+      res.status(500).json({ message: 'could not connect to the database' });
+      return;
+    }
+
+    const db = client.db();
+
+    try {
+      const result = await db
+        .collection('next_blog_messages')
+        .insertOne(newMessage);
+      newMessage.id = result.insertedId;
+    } catch (error) {
+      console.log(error);
+      client.close();
+      res.status(500).json({ message: 'Sending Message failed' });
+      return;
+    }
+
+    client.close();
+
     console.log(newMessage);
 
     res
@@ -27,5 +56,7 @@ const handler = (req, res) => {
       .json({ message: 'Successfully stored message', message: newMessage });
   }
 };
+
+//nextblog_admin
 
 export default handler;
